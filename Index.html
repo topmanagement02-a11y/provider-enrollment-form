@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Provider Enrollment Form</title>
+<style>
+  body { font-family: 'Segoe UI', sans-serif; background: #f5f7fa; padding: 30px; }
+  h2 { text-align: center; color: #333; margin-bottom: 20px; }
+  form { max-width: 800px; margin: auto; }
+  .card { background: #fff; border-radius: 10px; padding: 20px; margin: 20px 0; box-shadow: 0 3px 8px rgba(0,0,0,0.1); }
+  .card h3 { margin-top: 0; color: #009688; border-left: 4px solid #009688; padding-left: 8px; }
+  .form-group { margin-bottom: 15px; }
+  .form-group label { font-weight: 600; margin-bottom: 6px; display: block; }
+  .form-group input, .form-group textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; }
+  textarea { min-height: 100px; resize: vertical; }
+  .hidden { display: none; }
+  .add-btn { background: #009688; color: #fff; border: none; padding: 8px 14px; border-radius: 6px; cursor: pointer; font-size: 14px; margin-top: 10px; align-self: flex-start; }
+  .add-btn:hover { background: #00796B; }
+  button[type="submit"] { background: #007bff; color: #fff; padding: 12px 25px; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; display: block; margin: 20px auto; }
+  button[type="submit"]:hover { background: #0056b3; }
+</style>
+</head>
+<body>
+
+<h2>Provider Enrollment Form</h2>
+<form id="enrollmentForm">
+  <!-- Role -->
+  <div class="card">
+    <h3>Select Role</h3>
+    <label><input type="radio" name="role" value="provider"> Provider joining a group practice</label><br>
+    <label><input type="radio" name="role" value="owner"> Owner of a practice</label>
+  </div>
+
+  <!-- Practice Info -->
+  <div class="card" id="practiceInfo">
+    <h3>Practice Information</h3>
+    <div class="form-group"><label>Practice Name</label><input type="text" name="practiceName" required></div>
+    <div class="form-group"><label>Practice Contact First Name</label><input type="text" name="practiceContactFirstName" required></div>
+    <div class="form-group"><label>Practice Contact Last Name</label><input type="text" name="practiceContactLastName" required></div>
+    <div class="form-group"><label>Practice Contact Email</label><input type="email" name="practiceContactEmail" required></div>
+    <div class="form-group"><label>Practice Contact Phone</label><input type="text" name="practiceContactPhone"></div>
+    <div class="form-group">
+      <label>Service Location(s)</label>
+      <input type="text" name="serviceLocation[]" placeholder="Primary Service Location">
+      <button type="button" class="add-btn" onclick="addServiceLocation()">+ Add Another Location</button>
+    </div>
+    <div class="form-group owner-only"><label>Tax ID</label><input type="text" name="taxId"></div>
+    <div class="form-group"><label>Office Phone</label><input type="text" name="officePhone"></div>
+    <div class="form-group"><label>Fax</label><input type="text" name="fax"></div>
+  </div>
+
+  <!-- Provider Info -->
+  <div class="card" id="providerInfo">
+    <h3>Provider Information</h3>
+    <div class="form-group"><label>Provider First Name</label><input type="text" name="providerFirstName" required></div>
+    <div class="form-group"><label>Provider Middle Initial</label><input type="text" name="providerMiddleInitial"></div>
+    <div class="form-group"><label>Provider Last Name</label><input type="text" name="providerLastName" required></div>
+    <div class="form-group"><label>Individual NPI</label><input type="text" name="individualNpi"></div>
+    <div class="form-group"><label>Medicare ID</label><input type="text" name="individualMedicare"></div>
+    <div class="form-group"><label>Medicaid ID</label><input type="text" name="individualMedicaid"></div>
+    <div class="form-group"><label>SSN</label><input type="text" name="ssn"></div>
+    <div class="form-group"><label>DOB</label><input type="date" name="dob"></div>
+    <div class="form-group"><label>License</label><input type="text" name="license"></div>
+    <div class="form-group"><label>CAQH ID</label><input type="text" name="caqhId"></div>
+    <div class="form-group"><label>Email</label><input type="email" name="email"></div>
+    <div class="form-group"><label>Cell</label><input type="text" name="cell"></div>
+    <div class="form-group"><label>Home Address</label><input type="text" name="homeAddress"></div>
+    <div class="form-group"><label>Taxonomy</label><input type="text" name="taxonomy"></div>
+    <div class="form-group"><label>Languages Spoken</label><input type="text" name="languages" placeholder="e.g. English, Spanish, Hindi"></div>
+  </div>
+
+  <!-- Documents -->
+  <div class="card" id="documents">
+    <h3>Documents Upload</h3>
+    <div class="form-group"><label>Upload Documents</label><input type="file" name="files" multiple></div>
+  </div>
+
+  <button type="submit">Submit</button>
+</form>
+
+<script>
+const webAppUrl = "https://script.google.com/macros/s/AKfycbzeT9gewu_K01avi8hgdxomRpHvuS8M3oyqjwAHxQb9DJdJ442oONnHYZbw/exec";
+
+// Dynamic add service location
+function addServiceLocation() {
+  const container = document.querySelector('#practiceInfo .form-group:nth-child(6)');
+  const input = document.createElement('input');
+  input.type = "text";
+  input.name = "serviceLocation[]";
+  input.style.marginTop = '5px';
+  input.placeholder = "Additional Service Location";
+  container.insertBefore(input, container.querySelector('.add-btn'));
+}
+
+// Show/hide owner fields
+const roleRadios = document.querySelectorAll('input[name="role"]');
+const ownerFields = document.querySelectorAll('.owner-only');
+ownerFields.forEach(f => f.style.display = 'none');
+
+roleRadios.forEach(r => r.addEventListener('change', () => {
+  if(r.value === 'owner'){ ownerFields.forEach(f => f.style.display = 'block'); }
+  else { ownerFields.forEach(f => f.style.display = 'none'); }
+}));
+
+// Form submit
+document.getElementById("enrollmentForm").addEventListener("submit", function(e){
+  e.preventDefault();
+  const form = e.target;
+  const data = {};
+  const files = {};
+
+  [...form.elements].forEach(el => {
+    if(el.name){
+      if(el.type === "file" && el.files.length){
+        for(let f of el.files){
+          const reader = new FileReader();
+          reader.onload = function(evt){
+            files[f.name] = { name: f.name, type: f.type, content: evt.target.result.split(',')[1] };
+          };
+          reader.readAsDataURL(f);
+        }
+      } else if(el.name.endsWith("[]")){
+        if(!data[el.name]) data[el.name] = [];
+        data[el.name].push(el.value);
+      } else { data[el.name] = el.value; }
+    }
+  });
+
+  setTimeout(() => {
+    data.files = files;
+    fetch(webAppUrl, { method: "POST", body: JSON.stringify(data) })
+      .then(res => res.json())
+      .then(res => {
+        if(res.status === "success"){ alert("Form submitted successfully!"); form.reset(); }
+        else { alert("Error: " + res.message); }
+      });
+  }, 1000);
+});
+</script>
+
+</body>
+</html>
