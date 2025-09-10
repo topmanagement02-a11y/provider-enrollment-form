@@ -1,130 +1,141 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Provider Enrollment Form</title>
-<style>
-  body { font-family: 'Segoe UI', sans-serif; background: #f5f7fa; padding: 20px; }
-  h2 { text-align: center; color: #333; margin-bottom: 20px; }
-  form { max-width: 900px; margin: auto; }
-  .card { background: #fff; border-radius: 10px; padding: 20px; margin: 20px 0; box-shadow: 0 3px 8px rgba(0,0,0,0.1); }
-  .card h3 { margin-top: 0; color: #009688; border-left: 4px solid #009688; padding-left: 8px; }
-  .form-group { margin-bottom: 12px; }
-  label { display:block; font-weight:600; margin-bottom:6px; }
-  input, textarea { width:100%; padding:10px; border:1px solid #ccc; border-radius:6px; box-sizing:border-box; }
-  textarea { min-height: 80px; resize: vertical; }
-  .add-btn { background:#009688; color:#fff; border:none; padding:6px 12px; border-radius:6px; cursor:pointer; margin-top:6px; }
-  button[type=submit] { background:#007bff; color:#fff; padding:12px 25px; border:none; border-radius:8px; cursor:pointer; font-size:16px; display:block; margin:20px auto; }
-  button[type=submit]:hover { background:#0056b3; }
-  .owner-only { display:none; }
-</style>
+  <meta charset="UTF-8">
+  <title>Provider Enrollment Form</title>
+  <style>
+    body { font-family: 'Segoe UI', sans-serif; background: #f5f7fa; padding: 30px; }
+    h2 { text-align: center; color: #333; margin-bottom: 20px; }
+    form { max-width: 800px; margin: auto; }
+    .card { background: #fff; border-radius: 10px; padding: 20px; margin: 20px 0; box-shadow: 0 3px 8px rgba(0,0,0,0.1); }
+    .card h3 { margin-top: 0; color: #009688; border-left: 4px solid #009688; padding-left: 8px; }
+    .form-group { margin-bottom: 15px; }
+    .form-group label { font-weight: 600; margin-bottom: 6px; display: block; }
+    .form-group input, .form-group textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; }
+    textarea { min-height: 100px; resize: vertical; }
+    .hidden { display: none; }
+    .add-btn { background: #009688; color: #fff; border: none; padding: 8px 14px; border-radius: 6px; cursor: pointer; font-size: 14px; margin-top: 10px; align-self: flex-start; }
+    .add-btn:hover { background: #00796B; }
+    button[type="submit"] { background: #007bff; color: #fff; padding: 12px 25px; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; display: block; margin: 20px auto; }
+    button[type="submit"]:hover { background: #0056b3; }
+  </style>
 </head>
 <body>
-
 <h2>Provider Enrollment Form</h2>
-<form id="enrollmentForm" action="YOUR_APPS_SCRIPT_URL_HERE" method="post" enctype="multipart/form-data">
 
-<!-- Role Selection -->
-<div class="card">
-  <h3>Select Role</h3>
-  <label><input type="radio" name="role" value="provider"> Provider joining a group practice</label>
-  <label><input type="radio" name="role" value="owner"> Owner of a practice</label>
-</div>
+<form id="enrollmentForm" action="YOUR_WEB_APP_URL" method="post" enctype="multipart/form-data">
 
-<!-- Practice Info -->
-<div class="card" id="practiceInfo">
-  <h3>Practice Information</h3>
-  <div class="form-group"><label>Practice Name</label><input type="text" name="practiceName" required></div>
-  <div class="form-group"><label>Practice Contact First Name</label><input type="text" name="practiceContactFirstName" required></div>
-  <div class="form-group"><label>Practice Contact Last Name</label><input type="text" name="practiceContactLastName" required></div>
-  <div class="form-group"><label>Practice Contact Email</label><input type="email" name="practiceContactEmail" required></div>
-  <div class="form-group"><label>Practice Contact Phone</label><input type="text" name="practiceContactPhone"></div>
-
-  <div class="form-group">
-    <label>Service Location(s)</label>
-    <input type="text" name="serviceLocation[]" placeholder="Primary Service Location">
-    <button type="button" class="add-btn" onclick="addServiceLocation()">+ Add Another Location</button>
+  <!-- Role Selection -->
+  <div class="card" id="roleSelection">
+    <h3>Select Role</h3>
+    <label><input type="radio" name="role" value="provider"> Provider joining a group practice</label><br>
+    <label><input type="radio" name="role" value="owner"> Owner of a practice</label>
   </div>
 
-  <div class="form-group owner-only"><label>Billing Address</label><input type="text" name="billingAddress"></div>
-  <div class="form-group"><label>Tax ID</label><input type="text" name="taxId"></div>
-  <div class="form-group owner-only"><label>Group NPI</label><input type="text" name="groupNpi"></div>
-  <div class="form-group owner-only"><label>Group Medicare PTAN/ID</label><input type="text" name="groupMedicare"></div>
-  <div class="form-group owner-only"><label>Group Medicaid ID</label><input type="text" name="groupMedicaid"></div>
-  <div class="form-group"><label>Counties you are seeing patients of</label><input type="text" name="counties"></div>
-  <div class="form-group"><label>Office Phone</label><input type="text" name="officePhone"></div>
-  <div class="form-group"><label>FAX</label><input type="text" name="fax"></div>
-</div>
+  <!-- All other fields initially hidden -->
+  <div id="allFields" class="hidden">
+    <!-- Practice Info -->
+    <div class="card" id="practiceInfo">
+      <h3>Practice Information</h3>
+      <div class="form-group"><label>Practice Name</label><input type="text" name="practiceName"></div>
+      <div class="form-group"><label>Practice Contact First Name</label><input type="text" name="practiceContactFirstName"></div>
+      <div class="form-group"><label>Practice Contact Last Name</label><input type="text" name="practiceContactLastName"></div>
+      <div class="form-group"><label>Practice Contact Email</label><input type="email" name="practiceContactEmail"></div>
+      <div class="form-group"><label>Practice Contact Phone</label><input type="text" name="practiceContactPhone"></div>
+      <div class="form-group">
+        <label>Service Location(s)</label>
+        <input type="text" name="serviceLocation[]" placeholder="Primary Service Location">
+        <button type="button" class="add-btn" onclick="addServiceLocation()">+ Add Another Location</button>
+      </div>
+      <div class="form-group owner-only"><label>Billing Address</label><input type="text" name="billingAddress"></div>
+      <div class="form-group"><label>Tax ID</label><input type="text" name="taxId"></div>
+      <div class="form-group owner-only"><label>Group NPI</label><input type="text" name="groupNpi"></div>
+      <div class="form-group owner-only"><label>Group Medicare PTAN/ID</label><input type="text" name="groupMedicare"></div>
+      <div class="form-group owner-only"><label>Group Medicaid ID</label><input type="text" name="groupMedicaid"></div>
+      <div class="form-group"><label>Counties you are seeing patients of</label><input type="text" name="counties"></div>
+      <div class="form-group"><label>Office Phone</label><input type="text" name="officePhone"></div>
+      <div class="form-group"><label>FAX</label><input type="text" name="fax"></div>
+    </div>
 
-<!-- Provider Info -->
-<div class="card">
-  <h3>Provider Information</h3>
-  <div class="form-group"><label>Provider First Name</label><input type="text" name="providerFirstName" required></div>
-  <div class="form-group"><label>Provider Middle Initial</label><input type="text" name="providerMiddleInitial"></div>
-  <div class="form-group"><label>Provider Last Name</label><input type="text" name="providerLastName" required></div>
-  <div class="form-group"><label>Individual NPI</label><input type="text" name="individualNpi"></div>
-  <div class="form-group"><label>Individual Medicare ID</label><input type="text" name="individualMedicare"></div>
-  <div class="form-group"><label>Individual Medicaid ID</label><input type="text" name="individualMedicaid"></div>
-  <div class="form-group"><label>SSN</label><input type="text" name="ssn"></div>
-  <div class="form-group"><label>DOB</label><input type="date" name="dob"></div>
-  <div class="form-group"><label>License</label><input type="text" name="license"></div>
-  <div class="form-group"><label>CAQH ID</label><input type="text" name="caqhId"></div>
-  <div class="form-group"><label>Email</label><input type="email" name="email"></div>
-  <div class="form-group"><label>Cell</label><input type="text" name="cell"></div>
-  <div class="form-group"><label>Home Address</label><input type="text" name="homeAddress"></div>
-  <div class="form-group"><label>Taxonomy</label><input type="text" name="taxonomy"></div>
-  <div class="form-group"><label>Specialty</label><input type="text" name="specialty"></div>
-  <div class="form-group"><label>Languages Spoken</label><input type="text" name="languages" placeholder="English, Spanish, etc."></div>
-</div>
+    <!-- Provider Info -->
+    <div class="card" id="providerInfo">
+      <h3>Provider Information</h3>
+      <div class="form-group"><label>Provider First Name</label><input type="text" name="providerFirstName"></div>
+      <div class="form-group"><label>Provider Middle Initial</label><input type="text" name="providerMiddleInitial"></div>
+      <div class="form-group"><label>Provider Last Name</label><input type="text" name="providerLastName"></div>
+      <div class="form-group"><label>Individual NPI</label><input type="text" name="individualNpi"></div>
+      <div class="form-group"><label>Individual Medicare ID</label><input type="text" name="individualMedicare"></div>
+      <div class="form-group"><label>Individual Medicaid ID</label><input type="text" name="individualMedicaid"></div>
+      <div class="form-group"><label>SSN</label><input type="text" name="ssn"></div>
+      <div class="form-group"><label>DOB</label><input type="date" name="dob"></div>
+      <div class="form-group"><label>License</label><input type="text" name="license"></div>
+      <div class="form-group"><label>CAQH ID</label><input type="text" name="caqhId"></div>
+      <div class="form-group"><label>Email</label><input type="email" name="email"></div>
+      <div class="form-group"><label>Cell</label><input type="text" name="cell"></div>
+      <div class="form-group"><label>Home Address</label><input type="text" name="homeAddress"></div>
+      <div class="form-group"><label>Taxonomy</label><input type="text" name="taxonomy"></div>
+      <div class="form-group"><label>Specialty</label><input type="text" name="specialty"></div>
+      <div class="form-group"><label>Languages Spoken</label><input type="text" name="languages"></div>
+    </div>
 
-<!-- Logins -->
-<div class="card">
-  <h3>Logins</h3>
-  <div class="form-group"><label>PECOS Login (For Medicare Only)</label><input type="text" name="pecosLogin"></div>
-  <div class="form-group"><label>PECOS Password (For Medicare Only)</label><input type="password" name="pecosPassword"></div>
-  <div class="form-group"><label>CAQH Login (For Commercial Ins)</label><input type="text" name="caqhLogin"></div>
-  <div class="form-group"><label>CAQH Password (For Commercial Ins)</label><input type="password" name="caqhPassword"></div>
-</div>
+    <!-- Logins -->
+    <div class="card" id="logins">
+      <h3>Logins</h3>
+      <div class="form-group"><label>PECOS Login</label><input type="text" name="pecosLogin"></div>
+      <div class="form-group"><label>PECOS Password</label><input type="password" name="pecosPassword"></div>
+      <div class="form-group"><label>CAQH Login</label><input type="text" name="caqhLogin"></div>
+      <div class="form-group"><label>CAQH Password</label><input type="password" name="caqhPassword"></div>
+    </div>
 
-<!-- Documents -->
-<div class="card">
-  <h3>Documents Upload</h3>
-  <div class="form-group"><label>Copy of License</label><input type="file" name="licenseFile"></div>
-  <div class="form-group"><label>Copy of Educational Degree</label><input type="file" name="degreeFile"></div>
-  <div class="form-group"><label>Copy of Malpractice</label><input type="file" name="malpracticeFile"></div>
-  <div class="form-group"><label>Resume</label><input type="file" name="resumeFile"></div>
-  <div class="form-group owner-only"><label>W9 Form</label><input type="file" name="w9File"></div>
-  <div class="form-group owner-only"><label>Voided Check</label><input type="file" name="checkFile"></div>
-  <div class="form-group owner-only"><label>Copy of IRS Letter</label><input type="file" name="irsFile"></div>
-</div>
+    <!-- Documents -->
+    <div class="card" id="documents">
+      <h3>Documents Upload</h3>
+      <div class="form-group"><label>Copy of License</label><input type="file" name="licenseFile"></div>
+      <div class="form-group"><label>Copy of Educational Degree</label><input type="file" name="degreeFile"></div>
+      <div class="form-group"><label>Copy of Malpractice</label><input type="file" name="malpracticeFile"></div>
+      <div class="form-group"><label>Resume</label><input type="file" name="resumeFile"></div>
+      <div class="form-group owner-only"><label>W9 Form</label><input type="file" name="w9File"></div>
+      <div class="form-group owner-only"><label>Voided Check</label><input type="file" name="checkFile"></div>
+      <div class="form-group owner-only"><label>IRS Letter</label><input type="file" name="irsFile"></div>
+    </div>
 
-<!-- Special Instructions -->
-<div class="card">
-  <h3>Special Instructions</h3>
-  <div class="form-group"><label>Notes for Credentialing Team</label><textarea name="specialInstructions"></textarea></div>
-</div>
+    <!-- Special Instructions -->
+    <div class="card" id="specialInstructions">
+      <h3>Special Instructions</h3>
+      <div class="form-group"><label>Notes for Credentialing Team</label><textarea name="specialInstructions"></textarea></div>
+    </div>
+  </div>
 
-<button type="submit">Submit</button>
+  <button type="submit">Submit</button>
 </form>
 
 <script>
-// Role show/hide owner fields
-const roleRadios = document.querySelectorAll('input[name="role"]');
-const ownerFields = document.querySelectorAll('.owner-only');
-roleRadios.forEach(r => r.addEventListener('change', () => {
-  ownerFields.forEach(f => f.style.display = r.value==='owner'?'block':'none');
-}));
+  // Show fields only after role selection
+  const roleRadios = document.querySelectorAll('input[name="role"]');
+  const allFields = document.getElementById('allFields');
+  const ownerFields = document.querySelectorAll('.owner-only');
 
-// Add service location dynamically
-function addServiceLocation() {
-  const container = document.querySelector('input[name="serviceLocation[]"]').parentNode;
-  const input = document.createElement('input');
-  input.type = 'text';
-  input.name = 'serviceLocation[]';
-  input.placeholder = 'Additional Service Location';
-  input.style.marginTop = '6px';
-  container.insertBefore(input, container.querySelector('.add-btn'));
-}
+  ownerFields.forEach(f => f.style.display = 'none'); // hide owner-only initially
+
+  roleRadios.forEach(r => r.addEventListener('change', () => {
+    allFields.classList.remove('hidden'); // show all fields
+    if(r.value === 'owner'){
+      ownerFields.forEach(f => f.style.display = 'block');
+    } else {
+      ownerFields.forEach(f => f.style.display = 'none');
+    }
+  }));
+
+  // Add dynamic service location
+  function addServiceLocation() {
+    const container = document.querySelector('#practiceInfo .form-group:nth-child(6)');
+    const input = document.createElement('input');
+    input.type = "text";
+    input.name = "serviceLocation[]";
+    input.placeholder = "Additional Service Location";
+    input.style.marginTop = "6px";
+    container.appendChild(input);
+  }
 </script>
 
 </body>
