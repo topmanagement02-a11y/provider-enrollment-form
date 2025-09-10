@@ -4,25 +4,121 @@
 <meta charset="UTF-8">
 <title>Provider Enrollment Form</title>
 <style>
-body { font-family: 'Segoe UI', sans-serif; background: #f5f7fa; padding: 24px; }
-form { max-width: 800px; margin: auto; }
-.card { background: #fff; border-radius: 10px; padding: 18px; margin: 14px 0; box-shadow: 0 3px 8px rgba(0,0,0,.08);}
-label { display:block; font-weight:600; margin-bottom:6px;}
-input, textarea { width:100%; padding:10px; border:1px solid #ccc; border-radius:6px; box-sizing:border-box;}
-.add-btn { background:#009688; color:#fff; border:none; padding:8px 12px; border-radius:6px; cursor:pointer;}
-button[type=submit]{ background:#007bff; color:#fff; padding:12px 20px; border:none; border-radius:8px; cursor:pointer; font-size:16px;}
+body { 
+  font-family: 'Segoe UI', sans-serif; 
+  background: #f5f7fa; 
+  padding: 24px; 
+}
+form { 
+  width: 50%; 
+  margin: auto; 
+}
+.card { 
+  background: #fff; 
+  border-radius: 10px; 
+  padding: 18px; 
+  margin: 14px 0; 
+  box-shadow: 0 3px 8px rgba(0,0,0,.08);
+}
+label { 
+  display:block; 
+  font-weight:600; 
+  margin-bottom:6px;
+}
+input, textarea { 
+  width:100%; 
+  padding:10px; 
+  border:1px solid #ccc; 
+  border-radius:6px; 
+  box-sizing:border-box;
+}
+.add-btn { 
+  background:#009688; 
+  color:#fff; 
+  border:none; 
+  padding:8px 12px; 
+  border-radius:6px; 
+  cursor:pointer;
+}
+button[type=submit]{ 
+  background:#007bff; 
+  color:#fff; 
+  padding:12px 20px; 
+  border:none; 
+  border-radius:8px; 
+  cursor:pointer; 
+  font-size:16px;
+}
 .owner-only { display:none; }
+#thankYouMessage { 
+  display: none; 
+  text-align:center; 
+  padding: 20px; 
+  font-size:18px; 
+  background: #d4edda; 
+  color: #155724; 
+  border-radius: 8px; 
+  max-width: 800px; 
+  margin: 20px auto; 
+}
+
+/* ✅ Radio alignment: text left, radio button ek straight vertical line center of card */
+.radio-group {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.radio-option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+}
+.option-text {
+  flex: 1;
+  text-align: left;
+}
+.radio-box {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.radio-option input[type="radio"] {
+  margin: 0;
+}
+
+/* ✅ Row layout for side-by-side fields */
+.row {
+  display: flex;
+  gap: 16px;
+}
+.row label {
+  flex: 1;
+}
 </style>
 </head>
 <body>
 
 <h2 style="text-align:center;">Provider Enrollment Form</h2>
 
+<div id="thankYouMessage">
+  ✅ Thank you for your submission.<br>
+  One of our enrollment specialists will begin processing your form and contact you if we need more information.
+</div>
+
 <form id="enrollmentForm" method="post" enctype="multipart/form-data">
   <div class="card">
     <h3>Select Role</h3>
-    <label><input type="radio" name="role" value="provider"> Provider joining a group practice</label>
-    <label><input type="radio" name="role" value="owner"> Owner of a practice</label>
+    <div class="radio-group">
+      <label class="radio-option">
+        <span class="option-text">Provider joining a group practice</span>
+        <span class="radio-box"><input type="radio" name="role" value="provider"></span>
+      </label>
+      <label class="radio-option">
+        <span class="option-text">Owner of a practice</span>
+        <span class="radio-box"><input type="radio" name="role" value="owner"></span>
+      </label>
+    </div>
   </div>
 
   <!-- Practice Info -->
@@ -30,17 +126,27 @@ button[type=submit]{ background:#007bff; color:#fff; padding:12px 20px; border:n
     <div class="card">
       <h3>Practice Information</h3>
       <label>Practice Name<input name="practiceName"></label>
-      <label>Practice Contact First Name<input name="practiceContactFirstName"></label>
-      <label>Practice Contact Last Name<input name="practiceContactLastName"></label>
-      <label>Practice Contact Email<input type="email" name="practiceContactEmail"></label>
-      <label>Practice Contact Phone<input name="practiceContactPhone"></label>
+
+      <div class="row">
+        <label>Practice Contact First Name<input name="practiceContactFirstName"></label>
+        <label>Practice Contact Last Name<input name="practiceContactLastName"></label>
+      </div>
+
+      <div class="row">
+        <label>Email<input type="email" name="practiceContactEmail"></label>
+        <label>Phone<input name="practiceContactPhone"></label>
+      </div>
+
       <label>Service Location(s)<input name="serviceLocation[]"></label>
       <button type="button" class="add-btn" onclick="addServiceLocation()">+ Add Another Location</button>
+
+      <!-- Owner-only fields -->
       <label class="owner-only">Billing Address<input name="billingAddress"></label>
-      <label>Tax ID<input name="taxId"></label>
+      <label class="owner-only">Tax ID<input name="taxId"></label>
       <label class="owner-only">Group NPI<input name="groupNpi"></label>
       <label class="owner-only">Group Medicare PTAN/ID<input name="groupMedicare"></label>
       <label class="owner-only">Group Medicaid ID<input name="groupMedicaid"></label>
+
       <label>Counties you are seeing patients of<input name="counties"></label>
       <label>Office Phone<input name="officePhone"></label>
       <label>FAX<input name="fax"></label>
@@ -51,9 +157,13 @@ button[type=submit]{ background:#007bff; color:#fff; padding:12px 20px; border:n
   <div id="providerSection" style="display:none;">
     <div class="card">
       <h3>Provider Information</h3>
-      <label>Provider First Name<input name="providerFirstName"></label>
-      <label>Provider Middle Initial<input name="providerMiddleInitial"></label>
-      <label>Provider Last Name<input name="providerLastName"></label>
+
+      <div class="row">
+        <label>First Name<input name="providerFirstName"></label>
+        <label>Middle Initial<input name="providerMiddleInitial"></label>
+        <label>Last Name<input name="providerLastName"></label>
+      </div>
+
       <label>Individual NPI<input name="individualNpi"></label>
       <label>Medicare ID<input name="individualMedicare"></label>
       <label>Medicaid ID<input name="individualMedicaid"></label>
@@ -61,21 +171,33 @@ button[type=submit]{ background:#007bff; color:#fff; padding:12px 20px; border:n
       <label>DOB<input type="date" name="dob"></label>
       <label>License<input name="license"></label>
       <label>CAQH ID<input name="caqhId"></label>
-      <label>Email<input type="email" name="email"></label>
-      <label>Cell<input name="cell"></label>
+
+      <div class="row">
+        <label>Email<input type="email" name="email"></label>
+        <label>Cell<input name="cell"></label>
+      </div>
+
       <label>Home Address<input name="homeAddress"></label>
       <label>Taxonomy<input name="taxonomy"></label>
       <label>Specialty<input name="specialty"></label>
       <label>Languages Spoken<input name="languages"></label>
     </div>
 
-    <div class="card">
-      <h3>Logins</h3>
-      <label>PECOS Login<input name="pecosLogin"></label>
-      <label>PECOS Password<input type="password" name="pecosPassword"></label>
-      <label>CAQH Login<input name="caqhLogin"></label>
-      <label>CAQH Password<input type="password" name="caqhPassword"></label>
-    </div>
+<div class="card">
+  <h3>Logins</h3>
+  
+  <!-- PECOS Row -->
+  <div class="row">
+    <label>PECOS Username<input name="pecosLogin"></label>
+    <label>PECOS Password<input type="password" name="pecosPassword"></label>
+  </div>
+
+  <!-- CAQH Row -->
+  <div class="row">
+    <label>CAQH Username<input name="caqhLogin"></label>
+    <label>CAQH Password<input type="password" name="caqhPassword"></label>
+  </div>
+</div>
 
     <div class="card">
       <h3>Documents Upload</h3>
@@ -120,7 +242,6 @@ function addServiceLocation() {
   parent.appendChild(input);
 }
 
-// Form submission
 document.getElementById('enrollmentForm').addEventListener('submit', function(e){
   e.preventDefault();
   const form = e.target;
@@ -132,24 +253,39 @@ document.getElementById('enrollmentForm').addEventListener('submit', function(e)
       if(el.type==='file' && el.files.length){
         for(let f of el.files){
           const reader = new FileReader();
-          reader.onload = evt => { files[f.name] = {name:f.name, type:f.type, content:evt.target.result.split(',')[1]}; };
+          reader.onload = evt => { 
+            files[f.name] = {name:f.name, type:f.type, content:evt.target.result.split(',')[1]}; 
+          };
           reader.readAsDataURL(f);
         }
       } else if(el.name.endsWith('[]')){
         if(!data[el.name]) data[el.name] = [];
         data[el.name].push(el.value);
-      } else { data[el.name] = el.value; }
+      } else {
+        data[el.name] = el.value;
+      }
     }
   });
 
   setTimeout(() => {
     data.files = files;
-    fetch(webAppUrl, {method:'POST', body:JSON.stringify(data)})
-      .then(res=>res.json())
-      .then(res=>{
-        if(res.status==='success'){ alert('Form submitted successfully!'); form.reset(); }
-        else { alert('Error: '+res.message); }
-      });
+    fetch(webAppUrl, {
+      method:'POST',
+      body:JSON.stringify(data)
+    })
+    .then(res => res.json())
+    .then(res => {
+      if(res.status === 'success'){
+        form.reset();
+        form.style.display = 'none';
+        document.getElementById("thankYouMessage").style.display = 'block';
+      } else {
+        alert("Error: " + res.message);
+      }
+    })
+    .catch(() => {
+      alert("Something went wrong. Please try again.");
+    });
   }, 1000);
 });
 </script>
