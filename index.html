@@ -51,6 +51,8 @@ button[type=submit]{
 }
 .owner-only { display:none; }
 .required-star { color: red; }
+
+/* Messages */
 #loadingMessage, #successMessage, #errorMessage {
   display:none; 
   margin:20px; 
@@ -59,9 +61,27 @@ button[type=submit]{
   text-align:center; 
   font-size:16px;
 }
-#loadingMessage { background:#fff3cd; color:#856404; }
 #successMessage { background:#d4edda; color:#155724; }
 #errorMessage { background:#f8d7da; color:#721c24; }
+
+/* Loader overlay */
+#loadingMessage {
+  display:none;   /* default hidden */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255,255,255,0.8);
+  backdrop-filter: blur(2px);
+  z-index: 9999;
+
+  align-items:center;
+  justify-content:center;
+  font-size:20px;
+  font-weight:600;
+  color:#856404;
+}
 
 /* Radio alignment */
 .radio-group {
@@ -172,7 +192,7 @@ button[type=submit]{
       <label>Medicaid ID<input name="individualMedicaid"></label>
       <label>SSN<span class="required-star">*</span><input name="ssn" required></label>
       <label>DOB<span class="required-star">*</span><input type="date" name="dob" required></label>
-      <label>License<input name="license" required><span class="required-star">*</span></label>
+      <label>License<span class="required-star">*</span><input name="license" required></label>
       <label>CAQH ID<input name="caqhId"></label>
 
       <div class="row">
@@ -251,7 +271,7 @@ document.getElementById('enrollmentForm').addEventListener('submit', function(e)
     return;
   }
 
-  document.getElementById("loadingMessage").style.display = "block";
+  document.getElementById("loadingMessage").style.display = "flex"; // show loader
   document.getElementById("successMessage").style.display = "none";
   document.getElementById("errorMessage").style.display = "none";
 
@@ -285,7 +305,7 @@ document.getElementById('enrollmentForm').addEventListener('submit', function(e)
     })
     .then(res => res.json())
     .then(res => {
-      document.getElementById("loadingMessage").style.display = "none";
+      document.getElementById("loadingMessage").style.display = "none"; // hide loader
       if(res.status === 'success'){
         form.reset();
         form.style.display = 'none';
@@ -295,7 +315,7 @@ document.getElementById('enrollmentForm').addEventListener('submit', function(e)
       }
     })
     .catch(() => {
-      document.getElementById("loadingMessage").style.display = "none";
+      document.getElementById("loadingMessage").style.display = "none"; // hide loader
       document.getElementById("errorMessage").style.display = "block";
     });
   }, 1000);
