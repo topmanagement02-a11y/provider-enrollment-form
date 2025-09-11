@@ -51,20 +51,25 @@ button[type=submit]{
 }
 .owner-only { display:none; }
 
-/* Loading, Success, Error messages */
-.message {
-  display:none; 
-  margin:20px; 
-  padding:15px; 
-  border-radius:8px; 
+#thankYouMessage { 
+  display: none; 
   text-align:center; 
-  font-size:16px;
+  padding: 20px; 
+  font-size:18px; 
+  background: #d4edda; 
+  color: #155724; 
+  border-radius: 8px; 
+  max-width: 800px; 
+  margin: 20px auto; 
 }
-#loadingMessage { background:#fff3cd; color:#856404; }
-#successMessage { background:#d4edda; color:#155724; }
-#errorMessage { background:#f8d7da; color:#721c24; }
 
-/* ✅ Radio alignment: text left, radio button ek straight vertical line center of card */
+/* ✅ Required field asterisk */
+label.required .label-text::after {
+  content: " *";
+  color: red;
+}
+
+/* ✅ Radio alignment */
 .radio-group {
   display: flex;
   flex-direction: column;
@@ -103,16 +108,14 @@ button[type=submit]{
 
 <h2 style="text-align:center;">Provider Enrollment Form</h2>
 
-<!-- Loading message -->
-<div id="loadingMessage" class="message">⏳ Please wait, your submission is being processed...</div>
-<!-- Success message -->
-<div id="successMessage" class="message">✅ Thank you for your submission. One of our enrollment specialists will begin processing your form and contact you if we need more information.</div>
-<!-- Error message -->
-<div id="errorMessage" class="message">❌ Something went wrong. Please try again.</div>
+<div id="thankYouMessage">
+  ✅ Thank you for your submission.<br>
+  One of our enrollment specialists will begin processing your form and contact you if we need more information.
+</div>
 
 <form id="enrollmentForm" method="post" enctype="multipart/form-data">
   <div class="card">
-    <h3>Select Role</h3>
+    <h3>Select Role<span style="color:red;"> *</span></h3>
     <div class="radio-group">
       <label class="radio-option">
         <span class="option-text">Provider joining a group practice</span>
@@ -129,31 +132,31 @@ button[type=submit]{
   <div id="practiceSection" style="display:none;">
     <div class="card">
       <h3>Practice Information</h3>
-      <label>Practice Name<input name="practiceName" required></label>
+      <label class="required"><span class="label-text">Practice Name</span><input name="practiceName" required></label>
 
       <div class="row">
-        <label>Practice Contact First Name<input name="practiceContactFirstName"></label>
-        <label>Practice Contact Last Name<input name="practiceContactLastName"></label>
+        <label><span class="label-text">Practice Contact First Name</span><input name="practiceContactFirstName"></label>
+        <label><span class="label-text">Practice Contact Last Name</span><input name="practiceContactLastName"></label>
       </div>
 
       <div class="row">
-        <label>Email<input type="email" name="practiceContactEmail"></label>
-        <label>Phone<input name="practiceContactPhone"></label>
+        <label><span class="label-text">Email</span><input type="email" name="practiceContactEmail"></label>
+        <label><span class="label-text">Phone</span><input name="practiceContactPhone"></label>
       </div>
 
-      <label>Service Location(s)<input name="serviceLocation[]" required></label>
+      <label class="required"><span class="label-text">Service Location(s)</span><input name="serviceLocation[]" required></label>
       <button type="button" class="add-btn" onclick="addServiceLocation()">+ Add Another Location</button>
 
       <!-- Owner-only fields -->
-      <label class="owner-only">Billing Address<input name="billingAddress"></label>
-      <label class="owner-only">Tax ID<input name="taxId" required></label>
-      <label class="owner-only">Group NPI<input name="groupNpi"></label>
-      <label class="owner-only">Group Medicare PTAN/ID<input name="groupMedicare"></label>
-      <label class="owner-only">Group Medicaid ID<input name="groupMedicaid"></label>
+      <label class="owner-only"><span class="label-text">Billing Address</span><input name="billingAddress"></label>
+      <label class="owner-only required"><span class="label-text">Tax ID</span><input name="taxId" required></label>
+      <label class="owner-only"><span class="label-text">Group NPI</span><input name="groupNpi"></label>
+      <label class="owner-only"><span class="label-text">Group Medicare PTAN/ID</span><input name="groupMedicare"></label>
+      <label class="owner-only"><span class="label-text">Group Medicaid ID</span><input name="groupMedicaid"></label>
 
-      <label>Counties you are seeing patients of<input name="counties"></label>
-      <label>Office Phone<input name="officePhone" required></label>
-      <label>FAX<input name="fax"></label>
+      <label><span class="label-text">Counties you are seeing patients of</span><input name="counties"></label>
+      <label class="required"><span class="label-text">Office Phone</span><input name="officePhone" required></label>
+      <label><span class="label-text">FAX</span><input name="fax"></label>
     </div>
   </div>
 
@@ -163,56 +166,56 @@ button[type=submit]{
       <h3>Provider Information</h3>
 
       <div class="row">
-        <label>First Name<input name="providerFirstName" required></label>
-        <label>Middle Initial<input name="providerMiddleInitial"></label>
-        <label>Last Name<input name="providerLastName" required></label>
+        <label class="required"><span class="label-text">First Name</span><input name="providerFirstName" required></label>
+        <label><span class="label-text">Middle Initial</span><input name="providerMiddleInitial"></label>
+        <label class="required"><span class="label-text">Last Name</span><input name="providerLastName" required></label>
       </div>
 
-      <label>Individual NPI<input name="individualNpi"></label>
-      <label>Medicare ID<input name="individualMedicare"></label>
-      <label>Medicaid ID<input name="individualMedicaid"></label>
-      <label>SSN<input name="ssn" required></label>
-      <label>DOB<input type="date" name="dob" required></label>
-      <label>License<input name="license" required></label>
-      <label>CAQH ID<input name="caqhId"></label>
+      <label><span class="label-text">Individual NPI</span><input name="individualNpi"></label>
+      <label><span class="label-text">Medicare ID</span><input name="individualMedicare"></label>
+      <label><span class="label-text">Medicaid ID</span><input name="individualMedicaid"></label>
+      <label class="required"><span class="label-text">SSN</span><input name="ssn" required></label>
+      <label class="required"><span class="label-text">DOB</span><input type="date" name="dob" required></label>
+      <label><span class="label-text">License</span><input name="license"></label>
+      <label><span class="label-text">CAQH ID</span><input name="caqhId"></label>
 
       <div class="row">
-        <label>Email<input type="email" name="email" required></label>
-        <label>Cell<input name="cell"></label>
+        <label class="required"><span class="label-text">Email</span><input type="email" name="email" required></label>
+        <label><span class="label-text">Cell</span><input name="cell"></label>
       </div>
 
-      <label>Home Address<input name="homeAddress" required></label>
-      <label>Taxonomy<input name="taxonomy"></label>
-      <label>Specialty<input name="specialty"></label>
-      <label>Languages Spoken<input name="languages"></label>
+      <label class="required"><span class="label-text">Home Address</span><input name="homeAddress" required></label>
+      <label><span class="label-text">Taxonomy</span><input name="taxonomy"></label>
+      <label><span class="label-text">Specialty</span><input name="specialty"></label>
+      <label><span class="label-text">Languages Spoken</span><input name="languages"></label>
     </div>
 
     <div class="card">
       <h3>Logins</h3>
       <div class="row">
-        <label>PECOS Username<input name="pecosLogin"></label>
-        <label>PECOS Password<input type="password" name="pecosPassword"></label>
+        <label><span class="label-text">PECOS Username</span><input name="pecosLogin"></label>
+        <label><span class="label-text">PECOS Password</span><input type="password" name="pecosPassword"></label>
       </div>
       <div class="row">
-        <label>CAQH Username<input name="caqhLogin"></label>
-        <label>CAQH Password<input type="password" name="caqhPassword"></label>
+        <label><span class="label-text">CAQH Username</span><input name="caqhLogin"></label>
+        <label><span class="label-text">CAQH Password</span><input type="password" name="caqhPassword"></label>
       </div>
     </div>
 
     <div class="card">
       <h3>Documents Upload</h3>
-      <label>Copy of License<input type="file" name="licenseFile" required></label>
-      <label>Copy of Educational Degree<input type="file" name="degreeFile" required></label>
-      <label>Copy of Malpractice<input type="file" name="malpracticeFile"></label>
-      <label>Resume<input type="file" name="resumeFile" required></label>
-      <label class="owner-only">W9 Form<input type="file" name="w9File"></label>
-      <label class="owner-only">Voided Check<input type="file" name="checkFile"></label>
-      <label class="owner-only">Copy of IRS Letter<input type="file" name="irsFile"></label>
+      <label class="required"><span class="label-text">Copy of License</span><input type="file" name="licenseFile" required></label>
+      <label class="required"><span class="label-text">Copy of Educational Degree</span><input type="file" name="degreeFile" required></label>
+      <label><span class="label-text">Copy of Malpractice</span><input type="file" name="malpracticeFile"></label>
+      <label class="required"><span class="label-text">Resume</span><input type="file" name="resumeFile" required></label>
+      <label class="owner-only"><span class="label-text">W9 Form</span><input type="file" name="w9File"></label>
+      <label class="owner-only"><span class="label-text">Voided Check</span><input type="file" name="checkFile"></label>
+      <label class="owner-only"><span class="label-text">Copy of IRS Letter</span><input type="file" name="irsFile"></label>
     </div>
 
     <div class="card">
       <h3>Special Instructions</h3>
-      <label>Notes for Credentialing Team<textarea name="specialInstructions" rows="4"></textarea></label>
+      <label><span class="label-text">Notes for Credentialing Team</span><textarea name="specialInstructions" rows="4"></textarea></label>
     </div>
   </div>
 
@@ -248,11 +251,6 @@ document.getElementById('enrollmentForm').addEventListener('submit', function(e)
   const data = {};
   const files = {};
 
-  // Show loading
-  document.getElementById("loadingMessage").style.display = "block";
-  document.getElementById("successMessage").style.display = "none";
-  document.getElementById("errorMessage").style.display = "none";
-
   [...form.elements].forEach(el => {
     if(el.name){
       if(el.type==='file' && el.files.length){
@@ -280,19 +278,16 @@ document.getElementById('enrollmentForm').addEventListener('submit', function(e)
     })
     .then(res => res.json())
     .then(res => {
-      document.getElementById("loadingMessage").style.display = "none";
       if(res.status === 'success'){
         form.reset();
         form.style.display = 'none';
-        document.getElementById("successMessage").style.display = 'block';
+        document.getElementById("thankYouMessage").style.display = 'block';
       } else {
-        document.getElementById("errorMessage").innerText = "❌ Error: " + res.message;
-        document.getElementById("errorMessage").style.display = 'block';
+        alert("Error: " + res.message);
       }
     })
     .catch(() => {
-      document.getElementById("loadingMessage").style.display = "none";
-      document.getElementById("errorMessage").style.display = 'block';
+      alert("Something went wrong. Please try again.");
     });
   }, 1000);
 });
