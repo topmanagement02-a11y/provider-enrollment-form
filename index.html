@@ -50,26 +50,20 @@ button[type=submit]{
   font-size:16px;
 }
 .owner-only { display:none; }
-
-#thankYouMessage { 
-  display: none; 
+.required-star { color: red; }
+#loadingMessage, #successMessage, #errorMessage {
+  display:none; 
+  margin:20px; 
+  padding:15px; 
+  border-radius:8px; 
   text-align:center; 
-  padding: 20px; 
-  font-size:18px; 
-  background: #d4edda; 
-  color: #155724; 
-  border-radius: 8px; 
-  max-width: 800px; 
-  margin: 20px auto; 
+  font-size:16px;
 }
+#loadingMessage { background:#fff3cd; color:#856404; }
+#successMessage { background:#d4edda; color:#155724; }
+#errorMessage { background:#f8d7da; color:#721c24; }
 
-/* ✅ Required field asterisk */
-label.required .label-text::after {
-  content: " *";
-  color: red;
-}
-
-/* ✅ Radio alignment */
+/* Radio alignment */
 .radio-group {
   display: flex;
   flex-direction: column;
@@ -94,7 +88,7 @@ label.required .label-text::after {
   margin: 0;
 }
 
-/* ✅ Row layout for side-by-side fields */
+/* Row layout */
 .row {
   display: flex;
   gap: 16px;
@@ -108,14 +102,13 @@ label.required .label-text::after {
 
 <h2 style="text-align:center;">Provider Enrollment Form</h2>
 
-<div id="thankYouMessage">
-  ✅ Thank you for your submission.<br>
-  One of our enrollment specialists will begin processing your form and contact you if we need more information.
-</div>
+<div id="loadingMessage">⏳ Please wait, your submission is being processed...</div>
+<div id="successMessage">✅ Thank you for your submission. One of our enrollment specialists will begin processing your form and contact you if we need more information.</div>
+<div id="errorMessage">❌ Something went wrong. Please try again.</div>
 
 <form id="enrollmentForm" method="post" enctype="multipart/form-data">
   <div class="card">
-    <h3>Select Role<span style="color:red;"> *</span></h3>
+    <h3>Select Role<span class="required-star">*</span></h3>
     <div class="radio-group">
       <label class="radio-option">
         <span class="option-text">Provider joining a group practice</span>
@@ -132,31 +125,34 @@ label.required .label-text::after {
   <div id="practiceSection" style="display:none;">
     <div class="card">
       <h3>Practice Information</h3>
-      <label class="required"><span class="label-text">Practice Name</span><input name="practiceName" required></label>
+      <label>Practice Name<span class="required-star">*</span><input name="practiceName" required></label>
 
       <div class="row">
-        <label><span class="label-text">Practice Contact First Name</span><input name="practiceContactFirstName"></label>
-        <label><span class="label-text">Practice Contact Last Name</span><input name="practiceContactLastName"></label>
+        <label>Practice Contact First Name<input name="practiceContactFirstName"></label>
+        <label>Practice Contact Last Name<input name="practiceContactLastName"></label>
       </div>
 
       <div class="row">
-        <label><span class="label-text">Email</span><input type="email" name="practiceContactEmail"></label>
-        <label><span class="label-text">Phone</span><input name="practiceContactPhone"></label>
+        <label>Email<input type="email" name="practiceContactEmail"></label>
+        <label>Phone<input name="practiceContactPhone"></label>
       </div>
 
-      <label class="required"><span class="label-text">Service Location(s)</span><input name="serviceLocation[]" required></label>
+      <label>Service Location(s)<span class="required-star">*</span></label>
+      <div id="serviceLocations">
+        <input name="serviceLocation[]" required>
+      </div>
       <button type="button" class="add-btn" onclick="addServiceLocation()">+ Add Another Location</button>
 
       <!-- Owner-only fields -->
-      <label class="owner-only"><span class="label-text">Billing Address</span><input name="billingAddress"></label>
-      <label class="owner-only required"><span class="label-text">Tax ID</span><input name="taxId" required></label>
-      <label class="owner-only"><span class="label-text">Group NPI</span><input name="groupNpi"></label>
-      <label class="owner-only"><span class="label-text">Group Medicare PTAN/ID</span><input name="groupMedicare"></label>
-      <label class="owner-only"><span class="label-text">Group Medicaid ID</span><input name="groupMedicaid"></label>
+      <label class="owner-only">Billing Address<input name="billingAddress"></label>
+      <label class="owner-only">Tax ID<span class="required-star">*</span><input name="taxId"></label>
+      <label class="owner-only">Group NPI<input name="groupNpi"></label>
+      <label class="owner-only">Group Medicare PTAN/ID<input name="groupMedicare"></label>
+      <label class="owner-only">Group Medicaid ID<input name="groupMedicaid"></label>
 
-      <label><span class="label-text">Counties you are seeing patients of</span><input name="counties"></label>
-      <label class="required"><span class="label-text">Office Phone</span><input name="officePhone" required></label>
-      <label><span class="label-text">FAX</span><input name="fax"></label>
+      <label>Counties you are seeing patients of<input name="counties"></label>
+      <label>Office Phone<span class="required-star">*</span><input name="officePhone"></label>
+      <label>FAX<input name="fax"></label>
     </div>
   </div>
 
@@ -166,56 +162,56 @@ label.required .label-text::after {
       <h3>Provider Information</h3>
 
       <div class="row">
-        <label class="required"><span class="label-text">First Name</span><input name="providerFirstName" required></label>
-        <label><span class="label-text">Middle Initial</span><input name="providerMiddleInitial"></label>
-        <label class="required"><span class="label-text">Last Name</span><input name="providerLastName" required></label>
+        <label>First Name<span class="required-star">*</span><input name="providerFirstName" required></label>
+        <label>Middle Initial<input name="providerMiddleInitial"></label>
+        <label>Last Name<span class="required-star">*</span><input name="providerLastName" required></label>
       </div>
 
-      <label><span class="label-text">Individual NPI</span><input name="individualNpi"></label>
-      <label><span class="label-text">Medicare ID</span><input name="individualMedicare"></label>
-      <label><span class="label-text">Medicaid ID</span><input name="individualMedicaid"></label>
-      <label class="required"><span class="label-text">SSN</span><input name="ssn" required></label>
-      <label class="required"><span class="label-text">DOB</span><input type="date" name="dob" required></label>
-      <label><span class="label-text">License</span><input name="license"></label>
-      <label><span class="label-text">CAQH ID</span><input name="caqhId"></label>
+      <label>Individual NPI<input name="individualNpi"></label>
+      <label>Medicare ID<input name="individualMedicare"></label>
+      <label>Medicaid ID<input name="individualMedicaid"></label>
+      <label>SSN<span class="required-star">*</span><input name="ssn" required></label>
+      <label>DOB<span class="required-star">*</span><input type="date" name="dob" required></label>
+      <label>License<input name="license" required><span class="required-star">*</span></label>
+      <label>CAQH ID<input name="caqhId"></label>
 
       <div class="row">
-        <label class="required"><span class="label-text">Email</span><input type="email" name="email" required></label>
-        <label><span class="label-text">Cell</span><input name="cell"></label>
+        <label>Email<span class="required-star">*</span><input type="email" name="email" required></label>
+        <label>Cell<input name="cell"></label>
       </div>
 
-      <label class="required"><span class="label-text">Home Address</span><input name="homeAddress" required></label>
-      <label><span class="label-text">Taxonomy</span><input name="taxonomy"></label>
-      <label><span class="label-text">Specialty</span><input name="specialty"></label>
-      <label><span class="label-text">Languages Spoken</span><input name="languages"></label>
+      <label>Home Address<span class="required-star">*</span><input name="homeAddress" required></label>
+      <label>Taxonomy<input name="taxonomy"></label>
+      <label>Specialty<input name="specialty"></label>
+      <label>Languages Spoken<input name="languages"></label>
     </div>
 
     <div class="card">
       <h3>Logins</h3>
       <div class="row">
-        <label><span class="label-text">PECOS Username</span><input name="pecosLogin"></label>
-        <label><span class="label-text">PECOS Password</span><input type="password" name="pecosPassword"></label>
+        <label>PECOS Username<input name="pecosLogin"></label>
+        <label>PECOS Password<input type="password" name="pecosPassword"></label>
       </div>
       <div class="row">
-        <label><span class="label-text">CAQH Username</span><input name="caqhLogin"></label>
-        <label><span class="label-text">CAQH Password</span><input type="password" name="caqhPassword"></label>
+        <label>CAQH Username<input name="caqhLogin"></label>
+        <label>CAQH Password<input type="password" name="caqhPassword"></label>
       </div>
     </div>
 
     <div class="card">
       <h3>Documents Upload</h3>
-      <label class="required"><span class="label-text">Copy of License</span><input type="file" name="licenseFile" required></label>
-      <label class="required"><span class="label-text">Copy of Educational Degree</span><input type="file" name="degreeFile" required></label>
-      <label><span class="label-text">Copy of Malpractice</span><input type="file" name="malpracticeFile"></label>
-      <label class="required"><span class="label-text">Resume</span><input type="file" name="resumeFile" required></label>
-      <label class="owner-only"><span class="label-text">W9 Form</span><input type="file" name="w9File"></label>
-      <label class="owner-only"><span class="label-text">Voided Check</span><input type="file" name="checkFile"></label>
-      <label class="owner-only"><span class="label-text">Copy of IRS Letter</span><input type="file" name="irsFile"></label>
+      <label>Copy of License<span class="required-star">*</span><input type="file" name="licenseFile" required></label>
+      <label>Copy of Educational Degree<span class="required-star">*</span><input type="file" name="degreeFile" required></label>
+      <label>Copy of Malpractice<input type="file" name="malpracticeFile"></label>
+      <label>Resume<span class="required-star">*</span><input type="file" name="resumeFile" required></label>
+      <label class="owner-only">W9 Form<input type="file" name="w9File"></label>
+      <label class="owner-only">Voided Check<input type="file" name="checkFile"></label>
+      <label class="owner-only">Copy of IRS Letter<input type="file" name="irsFile"></label>
     </div>
 
     <div class="card">
       <h3>Special Instructions</h3>
-      <label><span class="label-text">Notes for Credentialing Team</span><textarea name="specialInstructions" rows="4"></textarea></label>
+      <label>Notes for Credentialing Team<textarea name="specialInstructions" rows="4"></textarea></label>
     </div>
   </div>
 
@@ -231,23 +227,34 @@ document.querySelectorAll('input[name="role"]').forEach(radio => {
     document.getElementById('providerSection').style.display = 'block';
     document.querySelectorAll('.owner-only').forEach(f => {
       f.style.display = e.target.value === 'owner' ? 'block' : 'none';
+      if(e.target.value === 'owner') {
+        f.querySelector("input")?.setAttribute("required", true);
+      } else {
+        f.querySelector("input")?.removeAttribute("required");
+      }
     });
   });
 });
 
 function addServiceLocation() {
-  const parent = document.querySelector('input[name="serviceLocation[]"]').parentNode;
-  const input = document.createElement('input');
-  input.type = 'text';
-  input.name = 'serviceLocation[]';
-  input.placeholder = 'Additional Service Location';
-  input.style.marginTop = '6px';
-  parent.appendChild(input);
+  const div = document.createElement("div");
+  div.innerHTML = `<input name="serviceLocation[]" placeholder="Additional Service Location">`;
+  document.getElementById("serviceLocations").appendChild(div);
 }
 
 document.getElementById('enrollmentForm').addEventListener('submit', function(e){
   e.preventDefault();
   const form = e.target;
+
+  if(!form.checkValidity()){
+    alert("⚠️ Please complete all required fields before submitting.");
+    return;
+  }
+
+  document.getElementById("loadingMessage").style.display = "block";
+  document.getElementById("successMessage").style.display = "none";
+  document.getElementById("errorMessage").style.display = "none";
+
   const data = {};
   const files = {};
 
@@ -263,7 +270,7 @@ document.getElementById('enrollmentForm').addEventListener('submit', function(e)
         }
       } else if(el.name.endsWith('[]')){
         if(!data[el.name]) data[el.name] = [];
-        data[el.name].push(el.value);
+        if(el.value.trim() !== "") data[el.name].push(el.value);
       } else {
         data[el.name] = el.value;
       }
@@ -278,16 +285,18 @@ document.getElementById('enrollmentForm').addEventListener('submit', function(e)
     })
     .then(res => res.json())
     .then(res => {
+      document.getElementById("loadingMessage").style.display = "none";
       if(res.status === 'success'){
         form.reset();
         form.style.display = 'none';
-        document.getElementById("thankYouMessage").style.display = 'block';
+        document.getElementById("successMessage").style.display = 'block';
       } else {
-        alert("Error: " + res.message);
+        document.getElementById("errorMessage").style.display = "block";
       }
     })
     .catch(() => {
-      alert("Something went wrong. Please try again.");
+      document.getElementById("loadingMessage").style.display = "none";
+      document.getElementById("errorMessage").style.display = "block";
     });
   }, 1000);
 });
