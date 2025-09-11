@@ -249,8 +249,8 @@ document.querySelectorAll('input[name="role"]').forEach(radio => {
     document.getElementById('practiceSection').style.display = 'block';
     document.getElementById('providerSection').style.display = 'block';
     document.querySelectorAll('.owner-only').forEach(f => {
-      f.style.display = e.target.value === 'owner' ? 'block' : 'none';
-      if(e.target.value === 'owner') {
+      f.style.display = e.target.value === 'Owner of a practice' ? 'block' : 'none';
+      if(e.target.value === 'Owner of a practice') {
         f.querySelector("input")?.setAttribute("required", true);
       } else {
         f.querySelector("input")?.removeAttribute("required");
